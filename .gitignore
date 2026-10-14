@@ -1,0 +1,22 @@
+# MATLAB autosave / editor files
+*.asv
+*.m~
+*.autosave
+slprj/
+codegen/
+
+# Raw and intermediate data (deposit large data in a data archive instead)
+*.h5
+*.hdf5
+*.tif
+*.tiff
+*.avi
+*.mp4
+
+# Analysis outputs
+*.fig
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
