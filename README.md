@@ -2,13 +2,19 @@
 
 MATLAB code for the calcium-imaging analysis in:
 
-> **TODO: manuscript title**
-> TODO: authors. *TODO: journal* (year). DOI: TODO
+> **A circuit merging peripheral and core temperature input sets *Drosophila* larva thermal preference**
+> Stanislav Lazopulo, Marta Zlatic, Albert Cardona, Paul Garrity, Aravinthan D.T. Samuel.
+> TODO: journal / preprint, year, DOI.
 
 The pipeline takes volumetric two-channel (red / green GCaMP) recordings stored in
 `.h5` files, follows individual neurons through time, and extracts their raw
 fluorescence signals, together with the stimulus temperature recorded during
 imaging.
+
+Recordings were made on a spinning-disk confocal (40×/1.4 NA) while the stage
+temperature was controlled by a Peltier device. Each volume is 20 z-steps over
+40 µm at a 100 Hz plane rate (5 volumes/s). See *Materials and Methods,
+Confocal microscopy and calcium imaging* in the paper.
 
 ## Repository layout
 
@@ -19,6 +25,10 @@ signal_extraction/
                                        and launches the tracking app
     Calcium_Stan_Single_Neuron.mlapp   App Designer GUI: neuron tracking, proofreading
                                        and per-neuron signal extraction
+    stack2movie.m                      Writes an image stack to a video (used by the
+                                       app's "Make Stable Movie" menu)
+    background_100Hz.mat               Green-channel background image for 100 Hz imaging
+    warp.mat                           Red-to-green channel registration transform
 ```
 
 The signal-processing step (bleaching correction, normalization, figures) will be
@@ -31,7 +41,8 @@ added in a later folder.
 - Curve Fitting Toolbox (`fit` with `'exp2'`, used for the bleaching fit)
 - Parallel Computing Toolbox (optional; `parfor` runs serially without it)
 
-Two calibration files are also needed (paths are set inside `calcium_imaging_Stan.m`):
+Two calibration files in `signal_extraction/` are also needed. Their paths are set
+inside `calcium_imaging_Stan.m`:
 
 | File | Contents |
 |------|----------|
@@ -57,8 +68,9 @@ TODO: where the raw data is deposited (e.g., Zenodo/DANDI DOI).
 `calcium_imaging_Stan.m` is meant to be run **section by section** (Ctrl+Enter
 in the MATLAB editor), not as a whole script.
 
-1. Set the paths in the script to your local copies of the data folder,
-   `background_100Hz.mat` and `warp.mat`, and add `signal_extraction/` to the MATLAB path.
+1. Add `signal_extraction/` to the MATLAB path. In the script, set the paths
+   (the `cd` on line 9, the data folder in `uigetfile`, and the `importdata` calls for
+   `background_100Hz.mat` and `warp.mat`) to your local copies.
 2. **Read file**: select an `.h5` recording; the temperature trace is plotted.
 3. **Convert h5 into max intensity stack**: z-slices `z_start:z_end` (default
    1–20) are collapsed into a maximum-intensity projection for each channel and time point.
